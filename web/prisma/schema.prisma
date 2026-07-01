@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String?
+  wallet    String?  @unique // The Stellar wallet address
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  templates Template[]
+  batches   CertificateBatch[]
+}
+
+model Template {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String       // e.g. "Stellar Journey Completion"
+  designJson     String       // JSON storing coordinates, layout, font config
+  theme          String       @default("light") // dark/light
+  customFields   String       // JSON array of expected CSV columns (e.g. ["Name", "Course", "Date"])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  batches        CertificateBatch[]
+}
+
+model CertificateBatch {
+  id             String       @id @default(uuid())
+  organizationId String
+  templateId     String
+  name           String       // e.g. "Q2 Cohort 2026"
+  createdAt      DateTime     @default(now())
+  
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  template       Template     @relation(fields: [templateId], references: [id])
+  certificates   Certificate[]
+}
+
+model Certificate {
+  id             String           @id @default(uuid()) // Credential ID on blockchain
+  batchId        String
+  recipientEmail String
+  dynamicData    String           // JSON mapping CSV headers to values for this student
+  dataHash       String           // SHA-256 hash stored on Soroban
+  status         String           @default("Active")
+  issuedAt       DateTime         @default(now())
+  
+  batch          CertificateBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+}
