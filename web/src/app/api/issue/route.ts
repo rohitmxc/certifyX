@@ -26,12 +26,28 @@ export async function POST(req: NextRequest) {
       targetOrgId = defaultOrg.id;
     }
 
+    let targetTemplateId = templateId;
+    if (!targetTemplateId) {
+      let defaultTemplate = await prisma.template.findFirst({ where: { organizationId: targetOrgId } });
+      if (!defaultTemplate) {
+        defaultTemplate = await prisma.template.create({
+          data: {
+            organizationId: targetOrgId,
+            name: 'Default Template',
+            designJson: '{}',
+            customFields: '[]'
+          }
+        });
+      }
+      targetTemplateId = defaultTemplate.id;
+    }
+
     // Create the Batch
     const batch = await prisma.certificateBatch.create({
       data: {
         name: batchName,
         organizationId: targetOrgId,
-        templateId: templateId || undefined, // Note: templateId is required by schema, but we might fake it if none exists
+        templateId: targetTemplateId,
       }
     });
 
