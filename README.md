@@ -140,11 +140,11 @@ sequenceDiagram
 
 *Note: Populate these with your live addresses after running the deployment scripts.*
 
-*   **Credential Issuer Contract ID**: `[INSERT_ISSUER_CONTRACT_ID_HERE]`
-*   **Global Registry Contract ID**: `[INSERT_REGISTRY_CONTRACT_ID_HERE]`
+*   **Credential Issuer Contract ID**: `CCEJ2GI24KGE6SPNUPVK2O2C5AHG2VFITKKKDGQ7EKHUTFMNF5N3ZC4B`
+*   **Global Registry Contract ID**: `CDAGUCWUH2AJRUS6UCDNCLSLU3ODTGVK77TUWNRLCM4ETI5RN5S5RXQG`
 *   **Network**: Stellar Testnet
-*   **Example Transaction Hash**: `[INSERT_REAL_TX_HASH_HERE]`
-*   **Explorer Link**: [Stellar Expert Testnet](https://stellar.expert/explorer/testnet)
+*   **Example Transaction Hash**: `d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2`
+*   **Explorer Link**: [Stellar Expert Testnet](https://stellar.expert/explorer/testnet/tx/d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2)
 
 ---
 
