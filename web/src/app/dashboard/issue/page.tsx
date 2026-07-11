@@ -8,6 +8,8 @@ import Papa from "papaparse";
 import { jsPDF } from "jspdf";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as StellarSdk from "@stellar/stellar-sdk";
+import { useWalletStore } from "@/store/wallet";
+import { useSettingsStore } from "@/store/settings";
 import QRCode from "qrcode";
 import { pdf } from "@react-pdf/renderer";
 import { ReactPdfCertificate } from "@/components/ReactPdfCertificate";
@@ -254,10 +256,10 @@ export default function IssuePage() {
   };
 
   return (
-    <div className="p-8 flex flex-col xl:flex-row gap-8 min-h-screen bg-surface-bright">
+    <div className="p-4 md:p-8 flex flex-col xl:flex-row gap-8 min-h-screen bg-surface-bright">
       
       {/* Left Column: Form & Batch Controls */}
-      <div className="w-full xl:w-[450px] bg-pure-white p-8 rounded-none technical-border h-fit relative shrink-0">
+      <div className="w-full xl:w-[450px] bg-pure-white p-4 sm:p-8 rounded-none technical-border h-fit relative shrink-0">
         <div className="absolute top-0 right-0 w-8 h-8 border-l border-b border-primary bg-surface flex items-center justify-center">
           <span className="font-mono-label text-[10px] text-primary">01</span>
         </div>
@@ -297,8 +299,10 @@ export default function IssuePage() {
                 <label className="block font-mono-label text-[12px] uppercase text-outline mb-2 mt-4">SELECT TEMPLATE</label>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="border border-primary bg-surface-bright rounded-none p-3 cursor-pointer">
-                    <div className="w-full h-20 bg-pure-white border border-primary rounded-none mb-2 flex items-center justify-center font-dot text-[12px] text-primary">
-                      STANDARD
+                    <div className="w-full h-24 border border-primary rounded-none mb-2 relative overflow-hidden bg-white flex items-center justify-center">
+                      <div className="absolute" style={{ transform: 'scale(0.11)', transformOrigin: 'center', width: '1000px', height: '700px' }}>
+                        <CertificateTemplate credentialId="PREVIEW" />
+                      </div>
                     </div>
                     <p className="font-mono-label text-[12px] uppercase text-primary text-center">STELLAR DEFAULT</p>
                   </div>
@@ -441,11 +445,58 @@ export default function IssuePage() {
                     </div>
                   </div>
                   
+                  {customFields.map((field, idx) => (
+                    <div key={idx} className="flex gap-2 mt-2 items-end">
+                      <div className="flex-1">
+                        <label className="block font-mono-label text-[10px] uppercase text-outline mb-1">TEMPLATE TEXT TO OVERRIDE</label>
+                        <select 
+                          value={field.key}
+                          onChange={(e) => {
+                            const newFields = [...customFields];
+                            newFields[idx].key = e.target.value;
+                            setCustomFields(newFields);
+                          }}
+                          className="w-full px-3 py-2 bg-pure-white rounded-none border border-primary focus:outline-none font-hanken text-primary text-sm h-[38px]"
+                        >
+                          <option value="">Select text to modify...</option>
+                          <option value="title">Certificate Title (e.g. CERTIFICATE)</option>
+                          <option value="subtitle">Subtitle (e.g. OF PARTICIPATION)</option>
+                          <option value="presentedTo">Presentation Text (e.g. PROUDLY PRESENTED TO)</option>
+                          <option value="description">Description (e.g. for successfully participating in)</option>
+                        </select>
+                      </div>
+                      <div className="flex-1">
+                        <label className="block font-mono-label text-[10px] uppercase text-outline mb-1">NEW VALUE</label>
+                        <input 
+                          type="text" 
+                          value={field.value}
+                          onChange={(e) => {
+                            const newFields = [...customFields];
+                            newFields[idx].value = e.target.value;
+                            setCustomFields(newFields);
+                          }}
+                          placeholder="Enter custom text..."
+                          className="w-full px-3 py-2 bg-pure-white rounded-none border border-primary focus:outline-none font-hanken text-primary text-sm h-[38px]"
+                        />
+                      </div>
+                      <button 
+                        onClick={() => {
+                          const newFields = [...customFields];
+                          newFields.splice(idx, 1);
+                          setCustomFields(newFields);
+                        }}
+                        className="p-2 border border-signal-red text-signal-red hover:bg-signal-red hover:text-pure-white transition-colors h-[38px] mb-0.5"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  
                   <button 
                     onClick={() => setCustomFields([...customFields, {key: '', value: ''}])}
                     className="w-full border border-dashed border-primary py-1.5 font-mono-label text-[10px] uppercase text-primary hover:bg-pure-white transition-colors flex items-center justify-center gap-1 mt-2"
                   >
-                    <Plus className="w-3 h-3" /> ADD FIELD
+                    <Plus className="w-3 h-3" /> MODIFY TEMPLATE TEXT
                   </button>
                 </div>
 

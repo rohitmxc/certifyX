@@ -5,33 +5,24 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { BarChart, Activity } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Mock data representing database analytics. 
-// In a real scenario, this is fetched via React Query from your Next.js API route that reads from Prisma.
-const mockData = [
-  { date: 'Mon', credentials: 4 },
-  { date: 'Tue', credentials: 7 },
-  { date: 'Wed', credentials: 5 },
-  { date: 'Thu', credentials: 12 },
-  { date: 'Fri', credentials: 18 },
-  { date: 'Sat', credentials: 8 },
-  { date: 'Sun', credentials: 2 },
-];
-
 export default function AnalyticsPage() {
-  // Example React Query hook for fetching analytics
+  // Fetch real analytics data
   const { data, isLoading } = useQuery({
     queryKey: ['analyticsData'],
     queryFn: async () => {
-      // Simulate API call
-      return new Promise<typeof mockData>((resolve) => {
-        setTimeout(() => resolve(mockData), 1000);
-      });
+      const res = await fetch('/api/analytics');
+      if (!res.ok) throw new Error('Failed to fetch analytics');
+      return res.json();
     },
-    initialData: [],
+    initialData: {
+      totalIssued: 0,
+      activeIssuers: 0,
+      volumeData: []
+    }
   });
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8">
       <div className="flex items-center gap-3 border-b-2 border-pure-black pb-4">
         <BarChart className="w-8 h-8 text-primary" />
         <div>
@@ -48,7 +39,7 @@ export default function AnalyticsPage() {
             <CardTitle className="font-dot text-[14px] uppercase text-outline">Total Issued</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-playfair font-bold text-pure-black">56</div>
+            <div className="text-4xl font-playfair font-bold text-pure-black">{data?.totalIssued || 0}</div>
           </CardContent>
         </Card>
         
@@ -57,7 +48,7 @@ export default function AnalyticsPage() {
             <CardTitle className="font-dot text-[14px] uppercase text-outline">Active Issuers</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-playfair font-bold text-pure-black">3</div>
+            <div className="text-4xl font-playfair font-bold text-pure-black">{data?.activeIssuers || 0}</div>
           </CardContent>
         </Card>
 
@@ -87,7 +78,7 @@ export default function AnalyticsPage() {
           ) : (
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <AreaChart data={data?.volumeData || []} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorCreds" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#1E28EB" stopOpacity={0.8}/>

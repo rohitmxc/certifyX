@@ -8,9 +8,6 @@ const horizon = new Horizon.Server('https://horizon-testnet.stellar.org');
 
 const REGISTRY_ID = process.env.NEXT_PUBLIC_REGISTRY_CONTRACT_ID || '';
 
-/**
- * Builds the transaction to issue a credential using the registry contract
- */
 export async function buildIssueCredentialTx(
   credentialId: string, 
   dataHash: string, 
@@ -34,7 +31,7 @@ export async function buildIssueCredentialTx(
 
   const tx = new TransactionBuilder(account, { fee: "100000", networkPassphrase })
     .addOperation(contract.call("issue_credential", ...args))
-    .setTimeout(30)
+    .setTimeout(300)
     .build();
 
   // Prepare the transaction using Soroban RPC (simulates and adds footprint/resources)

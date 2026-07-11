@@ -1,140 +1,224 @@
 <div align="center">
   
-# 🎓 CertifyX
+# 🛡️ CertifyX
 
-**A next-generation platform for issuing, managing, and verifying cryptographic credentials on the Stellar blockchain using Soroban.**
+**A decentralized, enterprise-grade credential issuance and verification platform built on the Stellar network using Soroban.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Stellar](https://img.shields.io/badge/Network-Stellar_Testnet-black)](https://stellar.org/)
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange)](https://soroban.stellar.org/)
 
-*An immersive, tamper-proof credentialing system where institutions can instantly issue certificates, and students can own and verify them forever on the Stellar ledger.*
+![Hero Dashboard](./demo/img/hero.png)
+
+*Issue tamper-proof digital certificates in seconds. Your students and users own them forever, verified instantly on the Stellar blockchain with no monthly fees.*
 
 </div>
 
 ---
 
-## 📌 Quick Links
-
-*   **💻 GitHub Repository**: [rohitmxc/certifyX](https://github.com/rohitmxc/certifyX)
-*   **🌐 Live Production Link**: *(Coming Soon)*
-
----
-
-## 📖 The Vision: Problem & Solution
+## 📖 Product Overview & Problem Statement
 
 ### The Problem
-Traditional credentialing systems rely on centralized databases that are vulnerable to data loss, fraud, and ongoing hosting costs. When institutions shut down or migrate servers, student credentials often disappear. Furthermore, verifying paper or standard PDF certificates is a manual, highly inefficient process for employers.
+Educational institutions, DAOs, bootcamps, and companies face a massive problem with credential fraud. Traditional PDF certificates are easily forged, and manual verification is slow, costly, and requires trusting centralized databases that can be hacked, go offline, or charge exorbitant subscription fees to maintain records.
 
 ### The Solution: CertifyX
-We solve this by introducing a decentralized, cryptographically secure credentialing environment:
-- **Instant Issuance**: Institutions can design templates and issue credentials individually or in massive batches via CSV upload.
-- **On-Chain Immutability**: Every certificate is anchored to the Stellar Testnet via a Soroban smart contract and `ManageData` operations.
-- **Zero Storage Costs**: By leveraging the Stellar public ledger as the source of truth, there are no monthly database fees to maintain validity.
-- **Instant Cryptographic Verification**: Every generated PDF contains a dynamic QR code and hyperlink pointing directly to the exact Stellar transaction hash on `stellar.expert`.
-- **Premium Aesthetics**: Built with Next.js and Tailwind CSS, the platform features a sleek, professional Web3-native design.
+CertifyX is a decentralized credential registry built on Stellar Soroban:
+- **Instant Issuance**: Issue single or batch credentials using our drag-and-drop template builder.
+- **Cryptographic Proof**: Every certificate is mathematically anchored to the Stellar blockchain. The hash is immutable.
+- **Zero Storage Costs**: By anchoring data hashes on-chain rather than storing massive files, we keep issuance fees negligible.
+- **Instant Verification**: Anyone can scan a QR code or upload a certificate file to instantly verify its authenticity directly against the Soroban smart contract.
+- **Live Activity Feed**: Global real-time events track when credentials are issued or revoked on the network.
 
 ---
 
-## 🏆 Key Features
+## 🏗️ Architecture & Smart Contract Design
 
-| Feature | Implementation |
-|-------------|----------------|
-| **Multi-Wallet Support** | Implemented persistent multi-wallet connectivity (Freighter, Albedo, xBull, LOBSTR) using `@creit.tech/stellar-wallets-kit`. |
-| **Live Ledger Verification** | The platform dynamically queries the `StellarSdk.Horizon.Server` to display live XLM balances and prove credential issuance. |
-| **React-PDF Generation** | Fully offline-capable, client-side vector PDF generation that perfectly renders custom certificates without server crashes. |
-| **Batch Issuance Automation** | Seamlessly parse large CSV rosters and automatically process names, emails, and on-chain hashes for hundreds of students at once. |
-| **Full Dashboard Experience** | Dedicated Next.js routes for issuing credentials, managing organization settings, and viewing a persistent issuance history via SQLite/Prisma. |
+### Mermaid Architecture Diagram
 
----
+```mermaid
+graph TD
+    User([Issuer / Verifier]) -->|Interacts| UI[Next.js Frontend]
+    UI -->|Connects Wallet| SWK[StellarWalletsKit]
+    UI -->|Reads/Submits Txs| RPC[Soroban RPC]
+    
+    subgraph Stellar Network [Stellar Testnet]
+        RPC -->|Invokes| ContractA[Credential Issuer Contract]
+        ContractA -->|Cross-Contract Call| ContractB[Global Registry Contract]
+    end
+    
+    UI -.->|Queries DB for Templates/Drafts| DB[(Prisma / Postgres)]
+```
 
-## 🛡️ Smart Contract & Blockchain Architecture
+### Smart Contract Design & Inter-Contract Flow
 
-### Core Mechanism
-When an institution issues a certificate, CertifyX doesn't just store a string. The transaction packages **four distinct cryptographic data entries** into a single atomic ledger submission via `ManageData` operations:
+CertifyX utilizes two distinct Soroban smart contracts to enforce separation of concerns and robust security:
 
-1. **Credential ID** -> `[Student Name]`
-2. **Credential ID + Event** -> `[Event Name]`
-3. **Credential ID + Date** -> `[Issue Date]`
-4. **Credential ID + Type** -> `[Certificate Type]`
+1. **Credential Issuer Contract**: Handles the business logic of validating an issuer's permissions, formatting the credential payload, and organizing batch issuances.
+2. **Global Registry Contract**: A highly secure, append-only ledger that stores the immutable cryptographic hashes of the credentials. 
 
-This provides 100% indisputable cryptographic proof of the student's exact credential details without needing to host any verification backend yourself!
-
-### Smart Contract Flow
+**Inter-Contract Communication Flow:**
 ```mermaid
 sequenceDiagram
-    participant Institution
-    participant CertifyX Frontend
-    participant Stellar Ledger
+    participant UI as Next.js Frontend
+    participant Issuer as Credential Issuer Contract
+    participant Registry as Global Registry Contract
     
-    Institution->>CertifyX Frontend: Fill candidate details / Upload CSV
-    CertifyX Frontend->>CertifyX Frontend: Generate unique Credential ID
-    CertifyX Frontend->>Stellar Ledger: Submit multi-operation ManageData Transaction
-    Stellar Ledger-->>CertifyX Frontend: Tx Hash confirmed
-    CertifyX Frontend->>Institution: Generate PDF with embedded Tx Hash & QR Code
-    Institution-->>Student: Send cryptographically signed PDF
+    UI->>Issuer: issue_credential(hash, metadata)
+    activate Issuer
+    Issuer->>Issuer: Verify Admin / RBAC Signature
+    Issuer->>Registry: anchor_hash(hash, issuer_address)
+    activate Registry
+    Registry-->>Issuer: success (bool)
+    deactivate Registry
+    Issuer->>Issuer: Emit `CREDENTIAL_ISSUED` Event
+    Issuer-->>UI: Transaction Confirmed
+    deactivate Issuer
 ```
 
 ---
 
-## 🛠️ Technology Stack
-*   **Frontend**: Next.js 16 (App Router) + React 19 + TypeScript
-*   **Styling & UI**: Tailwind CSS v4 + Lucide Icons
-*   **PDF Generation**: `@react-pdf/renderer` + `html2canvas` + `jspdf`
-*   **Database**: SQLite + Prisma ORM
-*   **Stellar Integration**: `@stellar/stellar-sdk`, `@creit.tech/stellar-wallets-kit`
-*   **Contracts**: Rust (Soroban SDK)
+## 🚀 Features & Tech Stack
+
+**Frontend Layer**
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + custom monochromatic cyberpunk aesthetic
+- **State Management**: Zustand (Global Store) + React Query (Server State)
+- **Components**: shadcn/ui + Lucide Icons + Framer Motion
+- **Wallet Integration**: StellarWalletsKit (Freighter support, network switching)
+
+**Blockchain & Backend Layer**
+- **Smart Contracts**: Rust (Soroban SDK)
+- **Network**: Stellar Testnet
+- **Database**: Prisma + PostgreSQL (for off-chain template drafts)
+- **Events**: Real-time Soroban Event streaming and XDR decoding
 
 ---
 
-## 📁 Project Structure
-The repository is cleanly organized as a monorepo:
+## 📸 Platform Previews
 
-```text
-certifyX/
-├── contracts/               # Soroban Smart Contracts (Rust)
-│   ├── src/                 # Main logic for credential anchoring
-│   └── Cargo.toml           # Rust dependencies
-├── web/                     # Next.js Web Application
-│   ├── prisma/              # SQLite database schema
-│   ├── src/
-│   │   ├── app/             # App Router pages and dashboards
-│   │   ├── components/      # Reusable UI elements & React-PDF templates
-│   │   └── api/             # REST endpoints for database persistence
-└── README.md                # Project documentation
+### 🌟 Landing Page
+*A sleek, professional landing page with a dynamic, hacker-style scrolling marquee that fetches live on-chain issuance hashes.*
+<div align="center">
+  <img src="demo/img/hero.png" alt="Hero Dashboard" width="800"/>
+</div>
+
+### 📜 Dashboard & Issuance
+*An intuitive dashboard for issuing credentials. Connect your Freighter wallet to sign and submit directly to the Stellar network.*
+<div align="center">
+  <img src="demo/img/dashboard-issue.png" alt="Issue Credentials Dashboard" width="800"/>
+</div>
+
+### 🎨 Custom Template Builder
+*A visual drag-and-drop builder to design beautiful certificates that match your brand.*
+<div align="center">
+  <img src="demo/img/template-builder.png" alt="Template Builder" width="800"/>
+</div>
+
+### ⚡ Success & Live Activity Feed
+*Upon successful issuance, view the transaction confirmation. The global activity feed polls the Soroban RPC to display real-time network events.*
+<div align="center">
+  <img src="demo/img/issued-successfully-with-feed.png" alt="Success and Activity Feed" width="800"/>
+</div>
+
+### 📱 Fully Mobile Responsive
+*The entire application, including complex dashboards and tables, is optimized for seamless mobile usage.*
+<div align="center">
+  <img src="demo/img/mobile-1.png" alt="Mobile View 1" width="300"/>
+  <img src="demo/img/mobile-2.png" alt="Mobile View 2" width="300"/>
+</div>
+
+### 🔍 Stellar Network Verification
+*All issuances are verifiable on the Stellar Expert Explorer, proving cryptographic immutability.*
+<div align="center">
+  <img src="demo/verification-on-stellar.png" alt="Network Verification" width="800"/>
+</div>
+
+---
+
+## 🛡️ Contract Addresses & Verification (Testnet)
+
+*Note: Populate these with your live addresses after running the deployment scripts.*
+
+*   **Credential Issuer Contract ID**: `[INSERT_ISSUER_CONTRACT_ID_HERE]`
+*   **Global Registry Contract ID**: `[INSERT_REGISTRY_CONTRACT_ID_HERE]`
+*   **Network**: Stellar Testnet
+*   **Example Transaction Hash**: `[INSERT_REAL_TX_HASH_HERE]`
+*   **Explorer Link**: [Stellar Expert Testnet](https://stellar.expert/explorer/testnet)
+
+---
+
+## 💻 Local Development & Setup
+
+### Prerequisites
+- Node.js (v18+)
+- Rust & Cargo
+- Stellar CLI (`stellar-cli`)
+- Freighter Wallet browser extension
+
+### Environment Variables
+Create a `.env` file in the `web` directory:
+```env
+NEXT_PUBLIC_SOROBAN_RPC_URL="https://soroban-testnet.stellar.org"
+NEXT_PUBLIC_SOROBAN_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+NEXT_PUBLIC_REGISTRY_CONTRACT_ID="[DEPLOYED_CONTRACT_ID]"
+DATABASE_URL="postgresql://user:pass@localhost:5432/certifyx"
+```
+
+### Running the Frontend
+```bash
+cd web
+npm install
+npm run dev
+```
+
+### Running Tests
+```bash
+# Frontend Tests (Vitest + RTL)
+npm run test
+
+# Smart Contract Tests
+cd contracts
+cargo test
 ```
 
 ---
 
-## 💻 Local Installation & Getting Started
+## 🚀 CI/CD & Deployment Steps
 
-### 📋 Prerequisites
-*   Node.js 18+ or 20+
-*   Cargo + Rust Toolchain (with `wasm32-unknown-unknown` target)
-*   Soroban CLI
-*   A Stellar Wallet (e.g., Freighter) installed on the Testnet
+### GitHub Actions (CI/CD)
+The repository includes automated CI/CD workflows (`.github/workflows/main.yml`) that trigger on PRs and merges to `main`. It automatically:
+1. Compiles and tests the Rust Soroban contracts.
+2. Runs frontend linting and unit tests.
+3. Builds the Next.js production bundle to ensure zero build errors.
 
-### 🛠️ Step-by-Step Setup
+### Deploying Contracts to Testnet
+Use the provided Stellar CLI commands to deploy to Testnet:
 
-1. **Clone the Repository**:
+1. **Build the Contracts**
    ```bash
-   git clone https://github.com/rohitmxc/certifyX.git
-   cd certifyX
+   cd contracts
+   stellar contract build
+   ```
+2. **Deploy Registry Contract**
+   ```bash
+   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/registry.wasm --source YOUR_IDENTITY --network testnet
+   ```
+3. **Deploy Issuer Contract**
+   ```bash
+   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/issuer.wasm --source YOUR_IDENTITY --network testnet
+   ```
+4. **Initialize Inter-Contract Links**
+   ```bash
+   stellar contract invoke --id [ISSUER_ID] --source YOUR_IDENTITY --network testnet -- init --registry [REGISTRY_ID] --admin [YOUR_ADDRESS]
    ```
 
-2. **Setup the Database**:
-   Navigate to the web directory and push the Prisma schema to generate the local SQLite database.
-   ```bash
-   cd web
-   npm install
-   npx prisma db push
-   ```
+---
 
-3. **Run the Development Server**:
-   Start the Next.js frontend application.
-   ```bash
-   npm run dev
-   ```
+## 🔒 Security Considerations
 
-4. **Access the Platform**:
-   Open [http://localhost:3000](http://localhost:3000) in your browser. Connect your Stellar wallet and start issuing cryptographic credentials immediately!
+- **Role-Based Access Control (RBAC)**: Only authorized admin addresses configured during contract initialization can invoke the `issue_credential` function.
+- **Immutability Constraints**: The Global Registry contract only exposes append-only methods. There is no `delete` function for hashes, ensuring permanent cryptographic proof.
+- **Frontend Validation**: The Next.js client strictly validates payload schemas using Zod before allowing the user to sign the transaction.
+- **Replay Protection**: Handled natively by Stellar's sequence numbers.
+- **Wallet Security**: Uses `StellarWalletsKit` to ensure private keys never touch the DOM or React state. All signing is delegated entirely to the secure Freighter extension.

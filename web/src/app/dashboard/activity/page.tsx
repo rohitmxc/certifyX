@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { rpc } from '@stellar/stellar-sdk';
+import { rpc, xdr, scValToNative } from '@stellar/stellar-sdk';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatDistanceToNow } from 'date-fns';
 import { ShieldCheck, XCircle, Activity } from 'lucide-react';
@@ -56,13 +56,35 @@ export default function ActivityFeedPage() {
           // Simplistic parsing of our emitted event shapes
           // Actual parsing requires XDR decoding of `ev.topic` and `ev.value`
           // We will mock the topic interpretation for the UI demonstration
-          const topicType = ev.topic[0]?.toString() || '';
+          let topicType = '';
+          let credId = 'Unknown';
+          try {
+            if (ev.topic[0]) {
+              topicType = scValToNative(xdr.ScVal.fromXDR(ev.topic[0], "base64")) as string;
+            }
+            if (ev.topic[1]) {
+              credId = scValToNative(xdr.ScVal.fromXDR(ev.topic[1], "base64")) as string;
+            }
+          } catch (e) {
+            topicType = ev.topic[0]?.toString() || '';
+          }
+          
+          let issuerAddr = 'Unknown Address';
+          try {
+            if (ev.value) {
+              const valNative = scValToNative(xdr.ScVal.fromXDR(ev.value, "base64"));
+              if (Array.isArray(valNative) && valNative.length > 0) {
+                issuerAddr = valNative[0] as string;
+              }
+            }
+          } catch(e) {}
+
           const isIssue = topicType.includes('issued');
           return {
             id: ev.id,
             type: isIssue ? 'issued' : 'revoked',
-            credentialId: 'CRD-XXXX', // Requires decoding topic[1]
-            issuer: 'Address', // Requires decoding ev.value
+            credentialId: credId,
+            issuer: issuerAddr,
             timestamp: new Date(ev.ledgerClosedAt),
             txHash: ev.txHash
           };
@@ -87,7 +109,7 @@ export default function ActivityFeedPage() {
   }, []);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-8">
       <div className="flex items-center gap-3 border-b-2 border-pure-black pb-4">
         <Activity className="w-8 h-8 text-primary" />
         <div>

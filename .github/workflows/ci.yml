@@ -1,0 +1,62 @@
+name: CertifyX CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./web
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './web/package-lock.json'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Tests
+      run: npm run test --if-present
+      
+    - name: Build Web Application
+      run: npm run build
+      
+  contracts-test:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./contracts
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        target: wasm32-unknown-unknown
+        
+    - name: Install Soroban CLI
+      run: cargo install --locked soroban-cli
+      
+    - name: Build Contracts
+      run: make build
+      
+    - name: Run Contract Tests
+      run: make test
