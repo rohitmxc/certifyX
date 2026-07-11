@@ -64,7 +64,7 @@ jobs:
           cache-dependency-path: './web/package-lock.json'
           
       - name: Install NPM Dependencies
-        run: npm ci
+        run: npm install
         
       - name: Run ESLint
         run: npm run lint
