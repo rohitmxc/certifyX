@@ -8,7 +8,7 @@
 [![Stellar](https://img.shields.io/badge/Network-Stellar_Testnet-black)](https://stellar.org/)
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange)](https://soroban.stellar.org/)
 
-> **Live Production Deployment:** [https://certify-x-web-git-main-rohitmx.vercel.app/](https://certify-x-web-git-main-rohitmx.vercel.app/)
+> 🚀 **Live Production Deployment:** [https://certify-x-web.vercel.app/](https://certify-x-web.vercel.app/)
 
 ![Hero Dashboard](./demo/img/hero.png)
 
