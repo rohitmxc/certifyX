@@ -14,8 +14,15 @@ export async function POST(req: NextRequest) {
     // Default Org for demo if no auth
     let targetOrgId = organizationId;
     if (!targetOrgId) {
-      const defaultOrg = await prisma.organization.findFirst();
-      if (!defaultOrg) return NextResponse.json({ error: "No organization found" }, { status: 400 });
+      let defaultOrg = await prisma.organization.findFirst();
+      if (!defaultOrg) {
+        defaultOrg = await prisma.organization.create({
+          data: {
+            name: "Stellar Community",
+            wallet: "G_DEMO_WALLET"
+          }
+        });
+      }
       targetOrgId = defaultOrg.id;
     }
 
