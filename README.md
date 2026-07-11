@@ -164,7 +164,7 @@ certifyx-workspace/
 ### 🎓 Generated Cryptographic Certificate
 *A beautiful, tamper-proof PDF certificate is generated for every candidate, complete with a QR code linking directly to the on-chain Soroban registry.*
 <div align="center">
-  <img src="demo/image.png" alt="Generated Certificate" width="800"/>
+  <img src="demo/img/genrated-certificate.png" alt="Generated Certificate" width="800"/>
 </div>
 
 ### 🧪 Automated Testing Suite
@@ -229,6 +229,10 @@ The repository includes automated CI/CD workflows (`.github/workflows/main.yml`)
 1. Compiles and tests the Rust Soroban contracts.
 2. Runs frontend linting and unit tests.
 3. Builds the Next.js production bundle to ensure zero build errors.
+
+<div align="center">
+  <img src="demo/ci-cd.png" alt="CI/CD Pipeline" width="800"/>
+</div>
 
 ### Deploying Contracts to Testnet
 Use the provided Stellar CLI commands to deploy to Testnet:
