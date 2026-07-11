@@ -35,7 +35,7 @@ CertifyX is a decentralized credential registry built on Stellar Soroban:
 
 ## 🏗️ Architecture & Smart Contract Design
 
-### Mermaid Architecture Diagram
+### High-Level System Architecture
 
 ```mermaid
 graph TD
@@ -51,7 +51,7 @@ graph TD
     UI -.->|Queries DB for Templates/Drafts| DB[(Prisma / Postgres)]
 ```
 
-### Smart Contract Design & Inter-Contract Flow
+### Smart Contract Execution Sequence
 
 CertifyX utilizes two distinct Soroban smart contracts to enforce separation of concerns and robust security:
 
@@ -94,6 +94,31 @@ sequenceDiagram
 - **Network**: Stellar Testnet
 - **Database**: Prisma + PostgreSQL (for off-chain template drafts)
 - **Events**: Real-time Soroban Event streaming and XDR decoding
+
+---
+
+## 📁 Project Directory Structure
+
+```text
+certifyx-workspace/
+├── contracts/                  # Soroban Smart Contracts Workspace
+│   ├── contracts/
+│   │   ├── certifier/          # Contract 1: Credential Issuer (RBAC & Logic)
+│   │   └── registry/           # Contract 2: Global Registry (Immutable Ledger)
+│   ├── Cargo.toml              # Rust Workspace configuration
+│   └── Makefile                # Build scripts for compiling WASM
+├── web/                        # Next.js Frontend & Backend Application
+│   ├── prisma/                 # PostgreSQL Database Schema
+│   ├── src/
+│   │   ├── app/                # Next.js App Router (Pages & API Routes)
+│   │   ├── components/         # Reusable UI & PDF Generation components
+│   │   ├── lib/                # Shared utilities (Prisma singleton)
+│   │   ├── service/            # Soroban & Stellar SDK interaction logic
+│   │   └── store/              # Zustand global state (Wallet & Settings)
+│   ├── package.json            # NPM Dependencies
+│   └── tailwind.config.ts      # Tailwind CSS Theme
+└── README.md                   # Project Documentation
+```
 
 ---
 
@@ -144,13 +169,14 @@ sequenceDiagram
 
 ---
 
-## 🛡️ Contract Addresses & Verification (Testnet)
+## 🛡️ Contract Addresses & Verifiable Links
 
+*   **Verifiable Live App**: [https://certify-x-web.vercel.app/](https://certify-x-web.vercel.app/)
 *   **Credential Issuer Contract ID**: `CA5NV5YW6U46IT55YWRS6ZBZWIADN2FZ5YPRQKP6QU3EDX65QAWX3NXA`
 *   **Global Registry Contract ID**: `CC2ECUCK5QZ76BKXIJUX5QUPRQ2ICAA44KJB5TXISCQRMZX34IHHOJSZ`
 *   **Network**: Stellar Testnet
 *   **Example Transaction Hash**: `d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2`
-*   **Explorer Link**: [Stellar Expert Testnet](https://stellar.expert/explorer/testnet/tx/d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2)
+*   **Stellar Explorer Link**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2)
 
 ---
 
