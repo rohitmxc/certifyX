@@ -55,10 +55,12 @@ export default function WalletConnect() {
         <div className="flex items-center gap-1 sm:gap-3 bg-surface-bright px-2 py-1 sm:px-3 sm:py-1.5 border-2 border-pure-black shadow-[2px_2px_0_0_#0F0E0E]">
           <div className="hidden sm:block w-2 h-2 rounded-full bg-[#1E28EB] animate-pulse"></div>
           {balance && (
-            <span className="font-mono text-[10px] sm:text-[12px] font-bold tracking-tight text-primary mr-1 whitespace-nowrap">
-              <span className="sm:hidden">{Math.floor(parseFloat(balance))} XLM</span>
-              <span className="hidden sm:inline">{balance} XLM</span>
-            </span>
+            <div className="bg-primary/10 border border-primary/20 px-2 py-0.5 mr-1 flex items-center">
+              <span className="font-dot text-[10px] sm:text-[12px] text-primary whitespace-nowrap">
+                <span className="sm:hidden">{Math.floor(parseFloat(balance))} XLM</span>
+                <span className="hidden sm:inline">{balance} XLM</span>
+              </span>
+            </div>
           )}
           <span className="font-mono text-[10px] sm:text-sm font-semibold tracking-tight text-pure-black whitespace-nowrap shrink-0">
             <span className="sm:hidden">{address.substring(0, 4)}...</span>
