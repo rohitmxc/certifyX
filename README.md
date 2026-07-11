@@ -9,6 +9,7 @@
 [![Soroban](https://img.shields.io/badge/Smart_Contracts-Soroban-orange)](https://soroban.stellar.org/)
 
 > 🚀 **Live Production Deployment:** [https://certify-x-web.vercel.app/](https://certify-x-web.vercel.app/)
+> 🎥 **Video Walkthrough:** [https://youtu.be/LSe_GoF8Kcg](https://youtu.be/LSe_GoF8Kcg)
 
 ![Hero Dashboard](./demo/img/hero.png)
 
