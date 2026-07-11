@@ -27,7 +27,16 @@ export async function POST(req: NextRequest) {
     }
 
     let targetTemplateId = templateId;
-    if (!targetTemplateId) {
+    let templateExists = false;
+
+    if (targetTemplateId) {
+      const existingTemplate = await prisma.template.findUnique({ where: { id: targetTemplateId } });
+      if (existingTemplate) {
+        templateExists = true;
+      }
+    }
+
+    if (!templateExists) {
       let defaultTemplate = await prisma.template.findFirst({ where: { organizationId: targetOrgId } });
       if (!defaultTemplate) {
         defaultTemplate = await prisma.template.create({
