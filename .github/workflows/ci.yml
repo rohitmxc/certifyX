@@ -1,4 +1,4 @@
-name: CertifyX CI/CD
+name: CertifyX CI/CD Pipeline
 
 on:
   push:
@@ -7,53 +7,88 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test-and-build:
+  # ------------------------------------------------------------------
+  # SMART CONTRACTS PIPELINE
+  # ------------------------------------------------------------------
+  contracts-test-build:
+    name: 🦀 Smart Contracts (Test & Build)
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./web
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: './web/package-lock.json'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run Tests
-      run: npm run test --if-present
-      
-    - name: Build Web Application
-      run: npm run build
-      
-  contracts-test:
-    runs-on: ubuntu-latest
-    
     defaults:
       run:
         working-directory: ./contracts
-        
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        target: wasm32-unknown-unknown
-        
-    - name: Build Contracts
-      run: cargo build --target wasm32-unknown-unknown --release
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
       
-    - name: Run Contract Tests
-      run: cargo test
+      - name: ⚙️ Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: wasm32-unknown-unknown
+          
+      - name: 📦 Cache Cargo registry & target
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            contracts/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          
+      - name: 🧪 Run Contract Unit Tests
+        run: cargo test
+        
+      - name: 🔨 Build Optimized Wasm Artifacts
+        run: cargo build --target wasm32-unknown-unknown --release
+
+  # ------------------------------------------------------------------
+  # FRONTEND PIPELINE
+  # ------------------------------------------------------------------
+  frontend-test-build:
+    name: ⚛️ Frontend (Lint, Test, Build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+          cache-dependency-path: './web/package-lock.json'
+          
+      - name: 📦 Install NPM Dependencies
+        run: npm ci
+        
+      - name: 🧹 Run ESLint
+        run: npm run lint
+        
+      - name: 🧪 Run Vitest Suite
+        run: npm run test
+        
+      - name: 🔨 Build Next.js Application
+        run: npm run build
+        
+  # ------------------------------------------------------------------
+  # DEPLOYMENT PIPELINE
+  # ------------------------------------------------------------------
+  deploy-vercel:
+    name: 🚀 Deploy to Vercel (Production)
+    needs: [contracts-test-build, frontend-test-build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Deploy Application to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./web
