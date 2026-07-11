@@ -144,8 +144,6 @@ sequenceDiagram
 
 ## 🛡️ Contract Addresses & Verification (Testnet)
 
-*Note: Populate these with your live addresses after running the deployment scripts.*
-
 *   **Credential Issuer Contract ID**: `CCEJ2GI24KGE6SPNUPVK2O2C5AHG2VFITKKKDGQ7EKHUTFMNF5N3ZC4B`
 *   **Global Registry Contract ID**: `CDAGUCWUH2AJRUS6UCDNCLSLU3ODTGVK77TUWNRLCM4ETI5RN5S5RXQG`
 *   **Network**: Stellar Testnet
