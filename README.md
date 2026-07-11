@@ -161,6 +161,12 @@ certifyx-workspace/
   <img src="demo/verification-on-stellar.png" alt="Network Verification" width="800"/>
 </div>
 
+### 🎓 Generated Cryptographic Certificate
+*A beautiful, tamper-proof PDF certificate is generated for every candidate, complete with a QR code linking directly to the on-chain Soroban registry.*
+<div align="center">
+  <img src="demo/image.png" alt="Generated Certificate" width="800"/>
+</div>
+
 ### 🧪 Automated Testing Suite
 *Comprehensive frontend testing using Vitest ensures platform stability. The test suite strictly verifies core components including the WalletConnect provider and Certificate Builder logic.*
 <div align="center">
