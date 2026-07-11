@@ -60,10 +60,10 @@ export default function ActivityFeedPage() {
           let credId = 'Unknown';
           try {
             if (ev.topic[0]) {
-              topicType = scValToNative(xdr.ScVal.fromXDR(ev.topic[0], "base64")) as string;
+              topicType = scValToNative(ev.topic[0]) as string;
             }
             if (ev.topic[1]) {
-              credId = scValToNative(xdr.ScVal.fromXDR(ev.topic[1], "base64")) as string;
+              credId = scValToNative(ev.topic[1]) as string;
             }
           } catch (e) {
             topicType = ev.topic[0]?.toString() || '';
@@ -72,7 +72,7 @@ export default function ActivityFeedPage() {
           let issuerAddr = 'Unknown Address';
           try {
             if (ev.value) {
-              const valNative = scValToNative(xdr.ScVal.fromXDR(ev.value, "base64"));
+              const valNative = scValToNative(ev.value);
               if (Array.isArray(valNative) && valNative.length > 0) {
                 issuerAddr = valNative[0] as string;
               }

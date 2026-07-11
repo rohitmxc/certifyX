@@ -28,7 +28,7 @@ export async function GET() {
 
     // Initialize an array with the last 7 days
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const volumeData = [];
+    const volumeData: { date: string; credentials: number; fullDate: string }[] = [];
     
     // Create an object to hold the counts for the last 7 days
     for (let i = 6; i >= 0; i--) {
