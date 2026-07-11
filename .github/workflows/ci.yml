@@ -11,21 +11,21 @@ jobs:
   # SMART CONTRACTS PIPELINE
   # ------------------------------------------------------------------
   contracts-test-build:
-    name: Smart Contracts (Test & Build)
+    name:  Smart Contracts (Test & Build)
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./contracts
     steps:
-      - name: Checkout Repository
+      - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
       
-      - name: Setup Rust toolchain
+      - name: ⚙️ Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          target: wasm32-unknown-unknown
+          target: wasm32v1-none
           
-      - name: Cache Cargo registry & target
+      - name: 📦 Cache Cargo registry & target
         uses: actions/cache@v4
         with:
           path: |
@@ -34,60 +34,58 @@ jobs:
             contracts/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           
-      - name: Build Optimized Wasm Artifacts
-        run: |
-          cargo build --target wasm32-unknown-unknown --release
-          mkdir -p target/wasm32v1-none/release
-          cp target/wasm32-unknown-unknown/release/*.wasm target/wasm32v1-none/release/
-        
-      - name: Run Contract Unit Tests
+      - name: 🧪 Run Contract Unit Tests
         run: cargo test
+        
+      - name: 🔨 Build Optimized Wasm Artifacts
+        run: cargo build --target wasm32v1-none --release
 
   # ------------------------------------------------------------------
   # FRONTEND PIPELINE
   # ------------------------------------------------------------------
   frontend-test-build:
-    name: Frontend (Lint, Test, Build)
+    name:  Frontend (Lint, Test, Build)
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./web
     steps:
-      - name: Checkout Repository
+      - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
         
-      - name: Setup Node.js (v20)
+      - name: ⚙️ Setup Node.js (v20)
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
           cache: 'npm'
-          cache-dependency-path: './web/package-lock.json'
+          cache-dependency-path: './package-lock.json'
           
-      - name: Install NPM Dependencies
+      - name: 📦 Install NPM Dependencies
+        working-directory: ./
         run: npm install
         
-      - name: Run ESLint
+      - name: 🧹 Run ESLint
         run: npm run lint
         
-      - name: Run Vitest Suite
+      - name: 🧪 Run Vitest Suite
         run: npm run test
         
-      - name: Build Next.js Application
+      - name: 🔨 Build Next.js Application
         run: npm run build
         
   # ------------------------------------------------------------------
   # DEPLOYMENT PIPELINE
   # ------------------------------------------------------------------
   deploy-vercel:
-    name: Deploy to Vercel (Production)
+    name:  Deploy to Vercel (Production)
     needs: [contracts-test-build, frontend-test-build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
         
-      - name: Deploy Application to Vercel
+      - name:  Deploy Application to Vercel
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
