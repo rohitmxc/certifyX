@@ -141,11 +141,15 @@ export default function ActivityFeedPage() {
                       <XCircle className="w-6 h-6 text-signal-red" />
                     )}
                     <div>
-                      <CardTitle className="font-dot text-[16px] uppercase tracking-wider">
+                      <CardTitle className="font-dot text-[16px] uppercase tracking-wider flex items-center gap-2">
                         {ev.type === 'issued' ? 'Credential Anchored' : 'Credential Revoked'}
+                        <span className="font-mono text-[12px] bg-surface-variant px-2 py-0.5 text-pure-black">
+                          {ev.credentialId}
+                        </span>
                       </CardTitle>
-                      <CardDescription className="font-mono-label text-[10px] mt-1">
-                        {formatDistanceToNow(ev.timestamp, { addSuffix: true })}
+                      <CardDescription className="font-mono-label text-[10px] mt-1 flex flex-col gap-1">
+                        <span>{formatDistanceToNow(ev.timestamp, { addSuffix: true })}</span>
+                        <span className="text-primary truncate max-w-[200px] sm:max-w-md">By Issuer: {ev.issuer}</span>
                       </CardDescription>
                     </div>
                   </div>
