@@ -700,7 +700,7 @@ export default function IssuePage() {
                 </>
               ) : csvData.length > 0 ? (
                 <>
-                  <div className="absolute top-6 left-6 right-32 flex justify-between items-center z-10 pointer-events-none">
+                  <div className="absolute top-6 left-6 right-52 flex justify-between items-center z-10 pointer-events-none">
                     <span className="bg-pure-white px-4 py-2 rounded-none font-mono-label text-[12px] uppercase border border-primary text-primary shadow-[2px_2px_0px_#000000] pointer-events-auto">
                       PREVIEW {previewIndex + 1} OF {csvData.length}
                     </span>
