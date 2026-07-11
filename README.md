@@ -146,8 +146,8 @@ sequenceDiagram
 
 ## 🛡️ Contract Addresses & Verification (Testnet)
 
-*   **Credential Issuer Contract ID**: `CCEJ2GI24KGE6SPNUPVK2O2C5AHG2VFITKKKDGQ7EKHUTFMNF5N3ZC4B`
-*   **Global Registry Contract ID**: `CDAGUCWUH2AJRUS6UCDNCLSLU3ODTGVK77TUWNRLCM4ETI5RN5S5RXQG`
+*   **Credential Issuer Contract ID**: `CA5NV5YW6U46IT55YWRS6ZBZWIADN2FZ5YPRQKP6QU3EDX65QAWX3NXA`
+*   **Global Registry Contract ID**: `CC2ECUCK5QZ76BKXIJUX5QUPRQ2ICAA44KJB5TXISCQRMZX34IHHOJSZ`
 *   **Network**: Stellar Testnet
 *   **Example Transaction Hash**: `d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2`
 *   **Explorer Link**: [Stellar Expert Testnet](https://stellar.expert/explorer/testnet/tx/d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2)
