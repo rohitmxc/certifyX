@@ -178,8 +178,8 @@ certifyx-workspace/
 ## 🛡️ Contract Addresses & Verifiable Links
 
 *   **Verifiable Live App**: [https://certify-x-web.vercel.app/](https://certify-x-web.vercel.app/)
-*   **Credential Issuer Contract ID**: `CA5NV5YW6U46IT55YWRS6ZBZWIADN2FZ5YPRQKP6QU3EDX65QAWX3NXA`
-*   **Global Registry Contract ID**: `CC2ECUCK5QZ76BKXIJUX5QUPRQ2ICAA44KJB5TXISCQRMZX34IHHOJSZ`
+*   **Credential Issuer Contract**: [`CA5NV5YW6U46IT55YWRS6ZBZWIADN2FZ5YPRQKP6QU3EDX65QAWX3NXA`](https://stellar.expert/explorer/testnet/contract/CA5NV5YW6U46IT55YWRS6ZBZWIADN2FZ5YPRQKP6QU3EDX65QAWX3NXA)
+*   **Global Registry Contract**: [`CC2ECUCK5QZ76BKXIJUX5QUPRQ2ICAA44KJB5TXISCQRMZX34IHHOJSZ`](https://stellar.expert/explorer/testnet/contract/CC2ECUCK5QZ76BKXIJUX5QUPRQ2ICAA44KJB5TXISCQRMZX34IHHOJSZ)
 *   **Network**: Stellar Testnet
 *   **Example Transaction Hash**: `d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2`
 *   **Stellar Explorer Link**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/d6b89e6104d1624d8dcf426cc6ca172b7d66ade9f6b6673638c44137432542e2)
