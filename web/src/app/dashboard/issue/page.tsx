@@ -234,7 +234,19 @@ export default function IssuePage() {
         body: JSON.stringify({
           batchName: eventName,
           records: csvData,
-          templateId: "demo-template-id" 
+          templateId: "demo-template-id",
+          globalFields: {
+            eventName: eventName,
+            date: manualDate,
+            issuerName: issuerName,
+            signature1Name: manualSig1Name,
+            signature1Title: manualSig1Title,
+            signature2Name: manualSig2Name,
+            signature2Title: manualSig2Title,
+            eventDetails: manualEventDetails,
+            mode: manualMode,
+            duration: manualDuration
+          }
         })
       });
       
