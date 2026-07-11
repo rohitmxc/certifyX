@@ -34,11 +34,14 @@ jobs:
             contracts/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           
+      - name: 🔨 Build Certifier Wasm Artifact
+        run: cargo build -p certifier --target wasm32v1-none --release
+        
+      - name: 🔨 Build Registry Wasm Artifact
+        run: cargo build -p certifyx-registry --target wasm32v1-none --release
+        
       - name: 🧪 Run Contract Unit Tests
         run: cargo test
-        
-      - name: 🔨 Build Optimized Wasm Artifacts
-        run: cargo build --target wasm32v1-none --release
 
   # ------------------------------------------------------------------
   # FRONTEND PIPELINE
