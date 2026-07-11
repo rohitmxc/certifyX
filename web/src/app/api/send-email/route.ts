@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     }
 
     const data = await resend.emails.send({
-      from: 'CertifyX <no-reply@certifyx.com>',
+      from: 'CertifyX <onboarding@resend.dev>',
       to: email,
       subject: `Your Certificate for ${eventName}`,
       html: `

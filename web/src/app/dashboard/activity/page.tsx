@@ -90,7 +90,7 @@ export default function ActivityFeedPage() {
           };
         });
 
-        setEvents(parsedEvents);
+        setEvents(parsedEvents.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()));
       } catch (err) {
         console.error("Failed to fetch events", err);
       } finally {
