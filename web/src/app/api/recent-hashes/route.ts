@@ -22,14 +22,6 @@ export async function GET() {
     return NextResponse.json({ hashes });
   } catch (error) {
     console.error("Failed to fetch recent hashes:", error);
-    // Vercel SQLite Serverless Fallback
-    return NextResponse.json({ 
-      hashes: [
-        "A8A3...92F4",
-        "E5A5...AD87",
-        "35FB...54F3",
-        "81FA...4DD7"
-      ] 
-    }, { status: 200 });
+    return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
   }
 }

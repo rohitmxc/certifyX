@@ -57,19 +57,6 @@ export async function GET() {
 
   } catch (error) {
     console.error('Analytics API error:', error);
-    // Vercel SQLite Serverless Fallback
-    return NextResponse.json({
-      totalIssued: 14,
-      activeIssuers: 3,
-      volumeData: [
-        { date: 'Mon', credentials: 2 },
-        { date: 'Tue', credentials: 5 },
-        { date: 'Wed', credentials: 0 },
-        { date: 'Thu', credentials: 4 },
-        { date: 'Fri', credentials: 2 },
-        { date: 'Sat', credentials: 1 },
-        { date: 'Sun', credentials: 0 }
-      ]
-    });
+    return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
   }
 }

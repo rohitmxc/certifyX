@@ -18,7 +18,8 @@ export default async function HistoryPage() {
     });
   } catch (error) {
     console.error("Failed to fetch certificates from database:", error);
-    // Fallback to empty array to prevent complete page crash
+    // Real Postgres solution: if it fails, it means the database is empty or unavailable
+    certificates = [];
   }
 
   return (
