@@ -34,13 +34,11 @@ jobs:
             contracts/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           
-      - name: Setup Stellar CLI
-        uses: stellar/actions/setup-cli@main
-        with:
-          version: latest
-          
       - name: Build Optimized Wasm Artifacts
-        run: stellar contract build
+        run: |
+          cargo build --target wasm32-unknown-unknown --release
+          mkdir -p target/wasm32v1-none/release
+          cp target/wasm32-unknown-unknown/release/*.wasm target/wasm32v1-none/release/
         
       - name: Run Contract Unit Tests
         run: cargo test
