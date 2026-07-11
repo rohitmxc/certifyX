@@ -11,7 +11,7 @@ jobs:
   # SMART CONTRACTS PIPELINE
   # ------------------------------------------------------------------
   contracts-test-build:
-    name: 🦀 Smart Contracts (Test & Build)
+    name:  Smart Contracts (Test & Build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,17 +34,22 @@ jobs:
             contracts/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           
+      - name: 🚀 Setup Stellar CLI
+        uses: stellar/actions/setup-cli@main
+        with:
+          version: latest
+          
+      - name: 🔨 Build Optimized Wasm Artifacts
+        run: stellar contract build
+        
       - name: 🧪 Run Contract Unit Tests
         run: cargo test
-        
-      - name: 🔨 Build Optimized Wasm Artifacts
-        run: cargo build --target wasm32-unknown-unknown --release
 
   # ------------------------------------------------------------------
   # FRONTEND PIPELINE
   # ------------------------------------------------------------------
   frontend-test-build:
-    name: ⚛️ Frontend (Lint, Test, Build)
+    name:  Frontend (Lint, Test, Build)
     runs-on: ubuntu-latest
     defaults:
       run:
