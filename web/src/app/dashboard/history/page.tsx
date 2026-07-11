@@ -11,10 +11,15 @@ const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 
 export default async function HistoryPage() {
-  // Fetch all certificates, ordering by latest
-  const certificates = await prisma.certificate.findMany({
-    orderBy: { issuedAt: 'desc' },
-  });
+  let certificates: any[] = [];
+  try {
+    certificates = await prisma.certificate.findMany({
+      orderBy: { issuedAt: 'desc' },
+    });
+  } catch (error) {
+    console.error("Failed to fetch certificates from database:", error);
+    // Fallback to empty array to prevent complete page crash
+  }
 
   return (
     <div className="p-4 md:p-8 bg-surface-bright min-h-screen">
