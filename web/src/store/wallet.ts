@@ -1,5 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { StellarWalletsKit } from '@creit.tech/stellar-wallets-kit/sdk';
+import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
+import { Networks } from '@creit.tech/stellar-wallets-kit';
 
 export interface WalletState {
   address: string | null;
@@ -24,22 +27,12 @@ export const useWalletStore = create<WalletState>()(
       connect: async () => {
         set({ isConnecting: true, error: null });
         try {
-          const { isConnected, requestAccess, isAllowed, setAllowed } = await import('@stellar/freighter-api');
-          
-          if (!(await isConnected())) {
-            throw new Error("Freighter is not installed or connected.");
+          try {
+            StellarWalletsKit.init({ modules: defaultModules() });
+          } catch (e) {
+            // Already initialized
           }
-          
-          let allowed = await isAllowed();
-          if (!allowed) {
-            await setAllowed();
-            allowed = await isAllowed();
-            if (!allowed) throw new Error("Permission to connect was denied.");
-          }
-          
-          const response = await requestAccess();
-          if (response.error) throw new Error(response.error as string);
-          const address = response.address;
+          const { address } = await StellarWalletsKit.authModal();
           set({ address, error: null });
           localStorage.setItem('certifyx_wallet', address);
         } catch (error: any) {
@@ -53,6 +46,7 @@ export const useWalletStore = create<WalletState>()(
       disconnect: () => {
         set({ address: null, error: null });
         localStorage.removeItem('certifyx_wallet');
+        StellarWalletsKit.disconnect().catch(console.error);
       },
 
       setNetwork: (network: string) => {

@@ -87,7 +87,7 @@ export default function WalletConnect() {
         </div>
       )}
       <Button 
-        onClick={connect} 
+        onClick={() => connect()} 
         disabled={isConnecting}
         className="bg-primary hover:bg-[#1520C0] text-pure-white rounded-none border border-transparent flex items-center gap-1 sm:gap-2 font-dot uppercase tracking-wider h-8 sm:h-10 px-3 sm:px-6 text-[10px] sm:text-[14px] shadow-[2px_2px_0_0_#0F0E0E]"
       >
