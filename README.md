@@ -21,37 +21,32 @@
 
 ## 🏆 Stellar Belt Challenge Submission Checklist
 
-This repository explicitly fulfills and exceeds all requirements for the **Level 1 (White Belt)**, **Level 2 (Yellow Belt)**, and **Level 3 (Orange Belt)** challenges.
-
-### ✅ Level 1 - White Belt Submission
-- **1. Wallet Setup**: Successfully setup the Freighter wallet (and integrated StellarWalletsKit for broader support), exclusively utilizing the **Stellar Testnet**.
-- **2. Wallet Connection**: Implemented wallet connect functionality and wallet disconnect functionality via a unified UI component.
-- **3. Balance Handling**: Fetch the connected wallet’s XLM balance using the Soroban RPC and display the balance clearly in the UI.
-- **4. Transaction Flow**: Send an XLM transaction on the Stellar testnet (to invoke our smart contracts) and show transaction feedback to the user, including the Success or failure state and the Transaction hash or confirmation message.
-- **5. Development Standards**: The project demonstrates excellent UI setup, wallet integration, balance fetch, transaction logic, and error handling.
-- **Required Deliverables**: Public GitHub repository, a README.md file featuring Project description, Setup instructions (how to run locally), and Screenshots (Wallet connected state, Balance displayed, Successful testnet transaction, and The transaction result is shown to the user).
-
-### ✅ Level 2 - Yellow Belt Submission
-- **3 Error Types Handled**: Implemented comprehensive error handling (e.g., wallet rejection `code: -1`, Prisma database errors, and generic API failures).
-- **Contract Deployed on Testnet**: Two bespoke Soroban contracts deployed successfully.
-- **Contract Called from the Frontend**: The `Issue` frontend page successfully calls the deployed Soroban contract.
-- **Transaction Status Visible**: Success modals and real-time ledger polling confirm execution.
-- **Minimum 2+ Meaningful Commits**: The repository contains over 100 meaningful commits.
-- **Deliverable Met**: Multi-wallet app with deployed contract and real-time event integration achieved.
-- **Required Deliverables**: Public GitHub repository, README with setup instructions, Live demo link (Vercel), Screenshot showing wallet options available, Deployed contract address, and Transaction hash of a contract call (verifiable on Stellar Explorer).
-
-### ✅ Level 3 - Orange Belt Submission
-- **Advanced Smart Contract Development**: Built `Registry` and `Issuer` contracts using Rust.
-- **Inter-Contract Communication**: The `Issuer` contract securely cross-calls the `Registry` contract to anchor hashes.
-- **Event Streaming & Real-Time Updates**: Global Live Activity feed subscribes to the Soroban RPC events.
-- **CI/CD Pipeline Setup**: GitHub Actions configured to run Rust/Next.js tests and build the app on PRs/Merges.
-- **Smart Contract Deployment Workflow**: Automated Makefile / Scripts provided in documentation.
-- **Mobile Responsive Frontend Development**: Complex tables and forms perfectly optimized for mobile screens.
-- **Error Handling & Loading States**: Rich UX loading states (Zustand state management) and Toast error notifications.
-- **Writing Tests for Contracts and Frontend**: Over 6 Vitest frontend tests and Rust smart contract unit tests successfully passing.
-- **Production-Ready Architecture Practices**: Built on Next.js App Router, Prisma ORM, and Zustand.
-- **Documentation & Demo Presentation**: Comprehensive README provided with all necessary context and links.
-- **Required Deliverables**: Minimum 10+ meaningful commits, Live demo link, Contract deployment address, Transaction hash for contract interaction, Screenshot showing Mobile responsive UI, CI/CD pipeline running, Test output with 3+ passing tests, and Demo video link (1–2 minutes).
+| Level | Requirement | Status & Implementation Details |
+| :--- | :--- | :--- |
+| ⚪️ **White Belt** | Wallet Setup | ✅ Integrated StellarWalletsKit (Freighter) exclusively on Testnet |
+| ⚪️ **White Belt** | Wallet Connection | ✅ Unified UI component for seamless connect/disconnect |
+| ⚪️ **White Belt** | Balance Handling | ✅ Fetches and clearly displays XLM balance via Soroban RPC |
+| ⚪️ **White Belt** | Transaction Flow | ✅ UI shows success/failure toasts and verified Tx Hash |
+| ⚪️ **White Belt** | Development Standards | ✅ High-quality UI, wallet integration, and error handling |
+| ⚪️ **White Belt** | Required Deliverables | ✅ Repo, README, Setup instructions, and 4 required Screenshots |
+| 🟡 **Yellow Belt** | 3 Error Types Handled | ✅ Wallet rejection (`code: -1`), Prisma DB errors, API failures |
+| 🟡 **Yellow Belt** | Contract Deployed | ✅ Issuer & Registry Soroban contracts deployed on Testnet |
+| 🟡 **Yellow Belt** | Contract Called | ✅ Frontend successfully calls the deployed smart contracts |
+| 🟡 **Yellow Belt** | Tx Status Visible | ✅ Success modals and real-time ledger polling confirm execution |
+| 🟡 **Yellow Belt** | Meaningful Commits | ✅ Repository contains over 120+ meaningful commits |
+| 🟡 **Yellow Belt** | Deliverable Met | ✅ Multi-wallet app with deployed contract and real-time events |
+| 🟡 **Yellow Belt** | Required Deliverables | ✅ Live demo, Multi-wallet screenshot, Verifiable Tx Hash |
+| 🟠 **Orange Belt** | Advanced Contracts | ✅ Built bespoke `Registry` and `Issuer` contracts using Rust |
+| 🟠 **Orange Belt** | Inter-Contract Comm | ✅ `Issuer` securely cross-calls `Registry` to anchor hashes |
+| 🟠 **Orange Belt** | Event Streaming | ✅ Global Live Activity feed subscribes to Soroban RPC events |
+| 🟠 **Orange Belt** | CI/CD Pipeline | ✅ GitHub Actions runs Rust/Next.js tests and builds on PRs |
+| 🟠 **Orange Belt** | Deployment Workflow | ✅ Automated Makefile scripts provided in documentation |
+| 🟠 **Orange Belt** | Mobile Responsive | ✅ Complex tables and forms perfectly optimized for mobile |
+| 🟠 **Orange Belt** | Error & Loading States | ✅ Rich UX loading states (Zustand) and Toast error notifications |
+| 🟠 **Orange Belt** | Testing Suite | ✅ 6+ Vitest frontend tests and Rust unit tests passing |
+| 🟠 **Orange Belt** | Production Architecture | ✅ Built on Next.js App Router, Prisma ORM, and Zustand |
+| 🟠 **Orange Belt** | Documentation | ✅ Comprehensive README provided with context and diagrams |
+| 🟠 **Orange Belt** | Required Deliverables | ✅ Video Demo, Mobile/CI screenshots, Contract IDs & Hash |
 
 ---
 
