@@ -225,6 +225,41 @@ certifyx-workspace/
 
 ---
 
+## 🚀 CI/CD & Deployment Steps
+
+### GitHub Actions (CI/CD)
+The repository includes automated CI/CD workflows (`.github/workflows/main.yml`) that trigger on PRs and merges to `main`. It automatically:
+1. Compiles and tests the Rust Soroban contracts.
+2. Runs frontend linting and unit tests.
+3. Builds the Next.js production bundle to ensure zero build errors.
+
+<div align="center">
+  <img src="demo/ci-cd.png" alt="CI/CD Pipeline" width="800"/>
+</div>
+
+### Deploying Contracts to Testnet
+Use the provided Stellar CLI commands to deploy to Testnet:
+
+1. **Build the Contracts**
+   ```bash
+   cd contracts
+   stellar contract build
+   ```
+2. **Deploy Registry Contract**
+   ```bash
+   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/registry.wasm --source YOUR_IDENTITY --network testnet
+   ```
+3. **Deploy Issuer Contract**
+   ```bash
+   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/issuer.wasm --source YOUR_IDENTITY --network testnet
+   ```
+4. **Initialize Inter-Contract Links**
+   ```bash
+   stellar contract invoke --id [ISSUER_ID] --source YOUR_IDENTITY --network testnet -- init --registry [REGISTRY_ID] --admin [YOUR_ADDRESS]
+   ```
+
+---
+
 ## 🛡️ Contract Addresses & Verifiable Links
 
 *   **Verifiable Live App**: [https://certify-x-web.vercel.app/](https://certify-x-web.vercel.app/)
@@ -269,41 +304,6 @@ npm run test
 cd contracts
 cargo test
 ```
-
----
-
-## 🚀 CI/CD & Deployment Steps
-
-### GitHub Actions (CI/CD)
-The repository includes automated CI/CD workflows (`.github/workflows/main.yml`) that trigger on PRs and merges to `main`. It automatically:
-1. Compiles and tests the Rust Soroban contracts.
-2. Runs frontend linting and unit tests.
-3. Builds the Next.js production bundle to ensure zero build errors.
-
-<div align="center">
-  <img src="demo/ci-cd.png" alt="CI/CD Pipeline" width="800"/>
-</div>
-
-### Deploying Contracts to Testnet
-Use the provided Stellar CLI commands to deploy to Testnet:
-
-1. **Build the Contracts**
-   ```bash
-   cd contracts
-   stellar contract build
-   ```
-2. **Deploy Registry Contract**
-   ```bash
-   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/registry.wasm --source YOUR_IDENTITY --network testnet
-   ```
-3. **Deploy Issuer Contract**
-   ```bash
-   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/issuer.wasm --source YOUR_IDENTITY --network testnet
-   ```
-4. **Initialize Inter-Contract Links**
-   ```bash
-   stellar contract invoke --id [ISSUER_ID] --source YOUR_IDENTITY --network testnet -- init --registry [REGISTRY_ID] --admin [YOUR_ADDRESS]
-   ```
 
 ---
 
