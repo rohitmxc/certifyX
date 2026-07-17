@@ -49,9 +49,6 @@ jobs:
   frontend-test-build:
     name:  Frontend (Lint, Test, Build)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./web
     steps:
       - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
@@ -65,7 +62,7 @@ jobs:
           
       - name: 📦 Install NPM Dependencies
         working-directory: ./
-        run: npm install --no-package-lock
+        run: npm install --no-package-lock --legacy-peer-deps
         
       - name: 🧹 Run ESLint
         run: npm run lint

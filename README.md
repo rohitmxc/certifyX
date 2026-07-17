@@ -151,16 +151,15 @@ certifyx-workspace/
 │   │   └── registry/           # Contract 2: Global Registry (Immutable Ledger)
 │   ├── Cargo.toml              # Rust Workspace configuration
 │   └── Makefile                # Build scripts for compiling WASM
-├── web/                        # Next.js Frontend & Backend Application
-│   ├── prisma/                 # PostgreSQL Database Schema
-│   ├── src/
-│   │   ├── app/                # Next.js App Router (Pages & API Routes)
-│   │   ├── components/         # Reusable UI & PDF Generation components
-│   │   ├── lib/                # Shared utilities (Prisma singleton)
-│   │   ├── service/            # Soroban & Stellar SDK interaction logic
-│   │   └── store/              # Zustand global state (Wallet & Settings)
-│   ├── package.json            # NPM Dependencies
-│   └── tailwind.config.ts      # Tailwind CSS Theme
+├── prisma/                     # PostgreSQL Database Schema
+├── src/                        # Next.js Frontend & Backend Application
+│   ├── app/                    # Next.js App Router (Pages & API Routes)
+│   ├── components/             # Reusable UI & PDF Generation components
+│   ├── lib/                    # Shared utilities (Prisma singleton)
+│   ├── service/                # Soroban & Stellar SDK interaction logic
+│   └── store/                  # Zustand global state (Wallet & Settings)
+├── package.json                # NPM Dependencies
+├── tailwind.config.ts          # Tailwind CSS Theme
 └── README.md                   # Project Documentation
 ```
 
@@ -280,7 +279,7 @@ Use the provided Stellar CLI commands to deploy to Testnet:
 - Freighter Wallet browser extension
 
 ### Environment Variables
-Create a `.env` file in the `web` directory:
+Create a `.env` file in the root directory:
 ```env
 NEXT_PUBLIC_SOROBAN_RPC_URL="https://soroban-testnet.stellar.org"
 NEXT_PUBLIC_SOROBAN_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
@@ -290,7 +289,6 @@ DATABASE_URL="postgresql://user:pass@localhost:5432/certifyx"
 
 ### Running the Frontend
 ```bash
-cd web
 npm install
 npm run dev
 ```
